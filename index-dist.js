@@ -39,26 +39,17 @@ var api = {
   toEqualShallowRendered: function toEqualShallowRendered(ReactElement) {
     var shallowRenderer = _reactAddonsTestUtils2['default'].createRenderer();
     shallowRenderer.render(this.actual);
-    var actualOutput = shallowRenderer.getRenderOutput();
-    shallowRenderer.render(ReactElement);
-    var reactElementOutput = shallowRenderer.getRenderOutput();
-    return (0, _expect2['default'])((0, _reactToJsx2['default'])(actualOutput)).toEqual((0, _reactToJsx2['default'])(reactElementOutput));
+    return (0, _expect2['default'])((0, _reactToJsx2['default'])(shallowRenderer.getRenderOutput()).replace(/[\t\n]/g, '')).toEqual((0, _reactToJsx2['default'])(ReactElement).replace(/[\t\n]/g, ''));
   },
   toNotEqualShallowRendered: function toNotEqualShallowRendered(ReactElement) {
     var shallowRenderer = _reactAddonsTestUtils2['default'].createRenderer();
     shallowRenderer.render(this.actual);
-    var actualOutput = shallowRenderer.getRenderOutput();
-    shallowRenderer.render(ReactElement);
-    var reactElementOutput = shallowRenderer.getRenderOutput();
-    return (0, _expect2['default'])((0, _reactToJsx2['default'])(actualOutput)).toNotEqual((0, _reactToJsx2['default'])(reactElementOutput));
+    return (0, _expect2['default'])((0, _reactToJsx2['default'])(shallowRenderer.getRenderOutput()).replace(/[\t\n]/g, '')).toNotEqual((0, _reactToJsx2['default'])(ReactElement).replace(/[\t\n]/g, ''));
   },
   toIncludeShallowRendered: function toIncludeShallowRendered(ReactElement) {
     var shallowRenderer = _reactAddonsTestUtils2['default'].createRenderer();
     shallowRenderer.render(this.actual);
-    var actualOutput = shallowRenderer.getRenderOutput();
-    shallowRenderer.render(ReactElement);
-    var reactElementOutput = shallowRenderer.getRenderOutput();
-    return (0, _expect2['default'])((0, _collapseWhiteSpace2['default'])((0, _reactToJsx2['default'])(actualOutput))).toInclude((0, _collapseWhiteSpace2['default'])((0, _reactToJsx2['default'])(reactElementOutput)));
+    return (0, _expect2['default'])((0, _reactToJsx2['default'])(shallowRenderer.getRenderOutput()).replace(/[\t\n]/g, '')).toInclude((0, _reactToJsx2['default'])(ReactElement).replace(/[\t\n]/g, ''));
   }
 };
 
