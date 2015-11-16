@@ -36,20 +36,41 @@ var api = {
   toIncludeJSX: function toIncludeJSX(ReactElement) {
     return (0, _expect2['default'])((0, _collapseWhiteSpace2['default'])((0, _reactToJsx2['default'])(this.actual))).toInclude((0, _collapseWhiteSpace2['default'])((0, _reactToJsx2['default'])(ReactElement)));
   },
-  toEqualShallowRendered: function toEqualShallowRendered(ReactElement) {
+  toRenderAsJSX: function toRenderAsJSX(ReactElement) {
     var shallowRenderer = _reactAddonsTestUtils2['default'].createRenderer();
     shallowRenderer.render(this.actual);
-    return (0, _expect2['default'])((0, _reactToJsx2['default'])(shallowRenderer.getRenderOutput()).replace(/[\t\n]/g, '')).toEqual((0, _reactToJsx2['default'])(ReactElement).replace(/[\t\n]/g, ''));
+    return (0, _expect2['default'])((0, _collapseWhiteSpace2['default'])((0, _reactToJsx2['default'])(shallowRenderer.getRenderOutput())).replace(/[\n]/g, '')).toEqual((0, _collapseWhiteSpace2['default'])((0, _reactToJsx2['default'])(ReactElement)).replace(/[\n]/g, ''));
   },
-  toNotEqualShallowRendered: function toNotEqualShallowRendered(ReactElement) {
+  toRenderAs: function toRenderAs(ReactElement) {
     var shallowRenderer = _reactAddonsTestUtils2['default'].createRenderer();
     shallowRenderer.render(this.actual);
-    return (0, _expect2['default'])((0, _reactToJsx2['default'])(shallowRenderer.getRenderOutput()).replace(/[\t\n]/g, '')).toNotEqual((0, _reactToJsx2['default'])(ReactElement).replace(/[\t\n]/g, ''));
+    var output = shallowRenderer.getRenderOutput();
+    shallowRenderer.render(ReactElement);
+    return (0, _expect2['default'])((0, _collapseWhiteSpace2['default'])((0, _reactToJsx2['default'])(output)).replace(/[\n]/g, '')).toEqual((0, _collapseWhiteSpace2['default'])((0, _reactToJsx2['default'])(shallowRenderer.getRenderOutput())).replace(/[\n]/g, ''));
   },
-  toIncludeShallowRendered: function toIncludeShallowRendered(ReactElement) {
+  toNotRenderAsJSX: function toNotRenderAsJSX(ReactElement) {
     var shallowRenderer = _reactAddonsTestUtils2['default'].createRenderer();
     shallowRenderer.render(this.actual);
-    return (0, _expect2['default'])((0, _reactToJsx2['default'])(shallowRenderer.getRenderOutput()).replace(/[\t\n]/g, '')).toInclude((0, _reactToJsx2['default'])(ReactElement).replace(/[\t\n]/g, ''));
+    return (0, _expect2['default'])((0, _collapseWhiteSpace2['default'])((0, _reactToJsx2['default'])(shallowRenderer.getRenderOutput())).replace(/[\n]/g, '')).toNotEqual((0, _collapseWhiteSpace2['default'])((0, _reactToJsx2['default'])(ReactElement)).replace(/[\n]/g, ''));
+  },
+  toNotRenderAs: function toNotRenderAs(ReactElement) {
+    var shallowRenderer = _reactAddonsTestUtils2['default'].createRenderer();
+    shallowRenderer.render(this.actual);
+    var output = shallowRenderer.getRenderOutput();
+    shallowRenderer.render(ReactElement);
+    return (0, _expect2['default'])((0, _collapseWhiteSpace2['default'])((0, _reactToJsx2['default'])(output)).replace(/[\n]/g, '')).toNotEqual((0, _collapseWhiteSpace2['default'])((0, _reactToJsx2['default'])(shallowRenderer.getRenderOutput())).replace(/[\n]/g, ''));
+  },
+  toIncludeJSXWhenRendered: function toIncludeJSXWhenRendered(ReactElement) {
+    var shallowRenderer = _reactAddonsTestUtils2['default'].createRenderer();
+    shallowRenderer.render(this.actual);
+    return (0, _expect2['default'])((0, _collapseWhiteSpace2['default'])((0, _reactToJsx2['default'])(shallowRenderer.getRenderOutput())).replace(/[\n]/g, '')).toInclude((0, _collapseWhiteSpace2['default'])((0, _reactToJsx2['default'])(ReactElement)).replace(/[\n]/g, ''));
+  },
+  toIncludeWhenRendered: function toIncludeWhenRendered(ReactElement) {
+    var shallowRenderer = _reactAddonsTestUtils2['default'].createRenderer();
+    shallowRenderer.render(this.actual);
+    var output = shallowRenderer.getRenderOutput();
+    shallowRenderer.render(ReactElement);
+    return (0, _expect2['default'])((0, _collapseWhiteSpace2['default'])((0, _reactToJsx2['default'])(output)).replace(/[\n]/g, '')).toInclude((0, _collapseWhiteSpace2['default'])((0, _reactToJsx2['default'])(shallowRenderer.getRenderOutput())).replace(/[\n]/g, ''));
   }
 };
 

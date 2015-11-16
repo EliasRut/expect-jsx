@@ -27,31 +27,64 @@ let api = {
       collapse(reactToJsx(ReactElement))
     );
   },
-  toEqualShallowRendered(ReactElement) {
+  toRenderAsJSX(ReactElement) {
     const shallowRenderer = TestUtils.createRenderer();
     shallowRenderer.render(this.actual);
     return expect(
-      reactToJsx(shallowRenderer.getRenderOutput()).replace(/[\t\n]/g, '')
+      collapse(reactToJsx(shallowRenderer.getRenderOutput())).replace(/[\n]/g, '')
     ).toEqual(
-      reactToJsx(ReactElement).replace(/[\t\n]/g, '')
+      collapse(reactToJsx(ReactElement)).replace(/[\n]/g, '')
     );
   },
-  toNotEqualShallowRendered(ReactElement) {
+  toRenderAs(ReactElement) {
+    const shallowRenderer = TestUtils.createRenderer();
+    shallowRenderer.render(this.actual);
+    const output = shallowRenderer.getRenderOutput();
+    shallowRenderer.render(ReactElement);
+    return expect(
+      collapse(reactToJsx(output)).replace(/[\n]/g, '')
+    ).toEqual(
+      collapse(reactToJsx(shallowRenderer.getRenderOutput())).replace(/[\n]/g, '')
+    );
+  },
+  toNotRenderAsJSX(ReactElement) {
     const shallowRenderer = TestUtils.createRenderer();
     shallowRenderer.render(this.actual);
     return expect(
-      reactToJsx(shallowRenderer.getRenderOutput()).replace(/[\t\n]/g, '')
+      collapse(reactToJsx(shallowRenderer.getRenderOutput())).replace(/[\n]/g, '')
     ).toNotEqual(
-      reactToJsx(ReactElement).replace(/[\t\n]/g, '')
+      collapse(reactToJsx(ReactElement)).replace(/[\n]/g, '')
     );
   },
-  toIncludeShallowRendered(ReactElement) {
+  toNotRenderAs(ReactElement) {
+    const shallowRenderer = TestUtils.createRenderer();
+    shallowRenderer.render(this.actual);
+    const output = shallowRenderer.getRenderOutput();
+    shallowRenderer.render(ReactElement);
+    return expect(
+      collapse(reactToJsx(output)).replace(/[\n]/g, '')
+    ).toNotEqual(
+      collapse(reactToJsx(shallowRenderer.getRenderOutput())).replace(/[\n]/g, '')
+    );
+  },
+  toIncludeJSXWhenRendered(ReactElement) {
     const shallowRenderer = TestUtils.createRenderer();
     shallowRenderer.render(this.actual);
     return expect(
-      reactToJsx(shallowRenderer.getRenderOutput()).replace(/[\t\n]/g, '')
+      collapse(reactToJsx(shallowRenderer.getRenderOutput())).replace(/[\n]/g, '')
     ).toInclude(
-      reactToJsx(ReactElement).replace(/[\t\n]/g, '')
+      collapse(reactToJsx(ReactElement)).replace(/[\n]/g, '')
+    );
+  },
+  toIncludeWhenRendered(ReactElement) {
+    const shallowRenderer = TestUtils.createRenderer();
+    shallowRenderer.render(this.actual);
+    const output = shallowRenderer.getRenderOutput();
+    shallowRenderer.render(ReactElement);
+    return expect(
+      collapse(reactToJsx(output)).replace(/[\n]/g, '')
+    ).toInclude(
+      collapse(reactToJsx(shallowRenderer.getRenderOutput())).replace(/[\n]/g, '')
     );
   }
 };

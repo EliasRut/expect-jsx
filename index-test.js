@@ -4,14 +4,10 @@
 import React from 'react';
 import expect from 'expect';
 import expectJSX from './index';
+import TestComponent from './TestComponent';
+import CombinedTestComponent from './CombinedTestComponent';
 
 expect.extend(expectJSX);
-
-class TestComponent extends React.Component {
-  render() {
-    return <div><span>Hi! {this.props.name}</span></div>;
-  }
-}
 
 describe('expect(ReactElement).toEqualJSX(ReactElement)', () => {
   context('api', () => {
@@ -27,16 +23,28 @@ describe('expect(ReactElement).toEqualJSX(ReactElement)', () => {
       expect(expect().toIncludeJSX).toBeA('function');
     });
 
-    it('has toEqualShallowRendered', () => {
-      expect(expect().toEqualShallowRendered).toBeA('function');
+    it('has toRenderAs', () => {
+      expect(expect().toRenderAs).toBeA('function');
     });
 
-    it('has toNotEqualShallowRendered', () => {
-      expect(expect().toNotEqualShallowRendered).toBeA('function');
+    it('has toRenderAsJSX', () => {
+      expect(expect().toRenderAsJSX).toBeA('function');
     });
 
-    it('has toIncludeShallowRendered', () => {
-      expect(expect().toIncludeShallowRendered).toBeA('function');
+    it('has toNotRenderAs', () => {
+      expect(expect().toNotRenderAs).toBeA('function');
+    });
+
+    it('has toNotRenderAsJSX', () => {
+      expect(expect().toNotRenderAsJSX).toBeA('function');
+    });
+
+    it('has toIncludeWhenRendered', () => {
+      expect(expect().toIncludeWhenRendered).toBeA('function');
+    });
+
+    it('has toIncludeJSXWhenRendered', () => {
+      expect(expect().toIncludeJSXWhenRendered).toBeA('function');
     });
   });
 
@@ -50,13 +58,15 @@ describe('expect(ReactElement).toEqualJSX(ReactElement)', () => {
     });
 
     it('throws when elements are different', () => {
+      let err;
       try {
         expect(<TestComponent extra="neous" />).toEqualJSX(<TestComponent />);
-      } catch (err) {
-        expect(err instanceof Error).toBe(true);
-        expect(err.message)
-          .toEqual(`Expected '<TestComponent extra="neous"/>\\n' to equal '<TestComponent/>\\n'`);
+      } catch (error) {
+        err = error;
       }
+      expect(err instanceof Error).toBe(true);
+      expect(err.message)
+        .toInclude(`to equal`);
     });
 
     it('does not care about function', () => {
@@ -87,12 +97,14 @@ describe('expect(ReactElement).toEqualJSX(ReactElement)', () => {
     });
 
     it('throws when elements are the same', () => {
+      let err;
       try {
         expect(<div />).toNotEqualJSX(<div />);
-      } catch (err) {
-        expect(err instanceof Error).toBe(true);
-        expect(err.message).toEqual(`Expected '<div/>\\n' to not equal '<div/>\\n'`);
+      } catch (error) {
+        err = error;
       }
+      expect(err instanceof Error).toBe(true);
+      expect(err.message).toInclude(`to not equal`);
     });
   });
 
@@ -103,62 +115,127 @@ describe('expect(ReactElement).toEqualJSX(ReactElement)', () => {
     });
 
     it('throws when element is not included', () => {
+      let err;
       try {
         expect(<div />).toIncludeJSX(<div Hello=", world!" />);
-      } catch (err) {
-        expect(err instanceof Error).toBe(true);
-        expect(err.message).toEqual(`Expected '<div/> ' to include '<div Hello=", world!"/> '`);
+      } catch (error) {
+        err = error;
       }
+      expect(err instanceof Error).toBe(true);
+      expect(err.message).toInclude(`to include`);
     });
   });
 
-  context('toEqualShallowRendered', () => {
+  context('toRenderAs', () => {
     it('works', () => {
       expect(<TestComponent name="Mary" />)
-        .toEqualShallowRendered(<div><span>Hi! Mary</span></div>);
+        .toRenderAs(<TestComponent name="Mary" />);
     });
     it('throws an exception on unequal', () => {
+      let err;
       try {
         expect(<TestComponent name="Mary" />)
-          .toEqualShallowRendered(<div><span>Hi, Mary</span></div>);
-      } catch (err) {
-        expect(err instanceof Error).toBe(true);
-        expect(err.message).toEqual(`Expected '<div><span>Hi! Mary</span></div>' to equal '<div><span>Hi, Mary</span></div>'`);
+          .toRenderAs(<TestComponent name="Hans" />);
+      } catch (error) {
+        err = error;
       }
+      expect(err instanceof Error).toBe(true);
+      expect(err.message).toInclude('to equal');
     });
   });
 
-  context('toNotEqualShallowRendered', () => {
+  context('toRenderAsJSX', () => {
     it('works', () => {
       expect(<TestComponent name="Mary" />)
-        .toNotEqualShallowRendered(<div><span>Hi, Mary</span></div>);
+        .toRenderAsJSX(<div className="test-class"><span>Hi! Mary</span></div>);
+    });
+    it('throws an exception on unequal', () => {
+      let err;
+      try {
+        expect(<TestComponent name="Mary" />)
+          .toRenderAsJSX(<div className="test-class"><span>Hi, Mary</span></div>);
+      } catch (error) {
+        err = error;
+      }
+      expect(err instanceof Error).toBe(true);
+      expect(err.message).toInclude('to equal');
+    });
+  });
+
+  context('toNotRenderAs', () => {
+    it('works', () => {
+      expect(<TestComponent name="Mary" />)
+        .toNotRenderAs(<TestComponent name="Hans" />);
     });
 
     it('throws an exception on equal', () => {
+      let err;
       try {
         expect(<TestComponent name="Mary" />)
-          .toNotEqualShallowRendered(<div><span>Hi! Mary</span></div>);
-      } catch (err) {
-        expect(err instanceof Error).toBe(true);
-        expect(err.message).toEqual(`Expected '<div><span>Hi! Mary</span></div>' to not equal '<div><span>Hi! Mary</span></div>'`);
+          .toNotRenderAs(<TestComponent name="Mary" />);
+      } catch (error) {
+        err = error;
       }
+      expect(err instanceof Error).toBe(true);
+      expect(err.message).toInclude('to not equal');
     });
   });
 
-  context('toIncludeShallowRendered', () => {
+  context('toNotRenderAsJSX', () => {
     it('works', () => {
       expect(<TestComponent name="Mary" />)
-        .toIncludeShallowRendered(<span>Hi! Mary</span>);
+        .toNotRenderAsJSX(<div className="test-class"><span>Hi, Mary</span></div>);
+    });
+
+    it('throws an exception on equal', () => {
+      let err;
+      try {
+        expect(<TestComponent name="Mary" />)
+          .toNotRenderAsJSX(<div className="test-class"><span>Hi! Mary</span></div>);
+      } catch (error) {
+        err = error;
+      }
+      expect(err instanceof Error).toBe(true);
+      expect(err.message).toInclude('to not equal');
+    });
+  });
+
+  context('toIncludeJSXWhenRendered', () => {
+    it('works', () => {
+      expect(<TestComponent name="Mary" />)
+        .toIncludeJSXWhenRendered(<span>Hi! Mary</span>);
     });
 
     it('throws an exception if not included', () => {
+      let err;
       try {
         expect(<TestComponent name="Mary" />)
-          .toIncludeShallowRendered(<span>Hi, Mary</span>);
-      } catch (err) {
-        expect(err instanceof Error).toBe(true);
-        expect(err.message).toEqual(`Expected '<div><span>Hi! Mary</span></div>' to include '<span>Hi, Mary</span>'`);
+          .toIncludeJSXWhenRendered(<span className="test-class">Hi, Mary</span>);
+      } catch (error) {
+        err = error;
       }
+      expect(err instanceof Error).toBe(true);
+      expect(err.message).toInclude('to include');
+    });
+  });
+
+  context('toIncludeWhenRendered', () => {
+    it('works', () => {
+      expect(<CombinedTestComponent name="Mary" />)
+        .toIncludeWhenRendered(<TestComponent name="Mary" />);
+    });
+
+
+    it('throws an exception if not included', () => {
+      let err;
+      try {
+        expect(<CombinedTestComponent name="Mary" />)
+          .toIncludeJSXWhenRendered(<TestComponent name="Hans" />);
+      } catch (error) {
+        err = error;
+      }
+      expect(err instanceof Error).toBe(true);
+      expect(err.message).toInclude('to include');
     });
   });
 });
