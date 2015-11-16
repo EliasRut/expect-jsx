@@ -117,6 +117,15 @@ describe('expect(ReactElement).toEqualJSX(ReactElement)', () => {
       expect(<TestComponent name="Mary" />)
         .toEqualShallowRendered(<div><span>Hi! Mary</span></div>);
     });
+    it('throws an exception on unequal', () => {
+      try {
+        expect(<TestComponent name="Mary" />)
+          .toEqualShallowRendered(<div><span>Hi, Mary</span></div>);
+      } catch (err) {
+        expect(err instanceof Error).toBe(true);
+        expect(err.message).toEqual(`Expected '<div><span>Hi! Mary</span></div>' to equal '<div><span>Hi, Mary</span></div>'`);
+      }
+    });
   });
 
   context('toNotEqualShallowRendered', () => {
@@ -124,12 +133,32 @@ describe('expect(ReactElement).toEqualJSX(ReactElement)', () => {
       expect(<TestComponent name="Mary" />)
         .toNotEqualShallowRendered(<div><span>Hi, Mary</span></div>);
     });
+
+    it('throws an exception on equal', () => {
+      try {
+        expect(<TestComponent name="Mary" />)
+          .toNotEqualShallowRendered(<div><span>Hi! Mary</span></div>);
+      } catch (err) {
+        expect(err instanceof Error).toBe(true);
+        expect(err.message).toEqual(`Expected '<div><span>Hi! Mary</span></div>' to not equal '<div><span>Hi! Mary</span></div>'`);
+      }
+    });
   });
 
   context('toIncludeShallowRendered', () => {
     it('works', () => {
       expect(<TestComponent name="Mary" />)
-        .toNotEqualShallowRendered(<span>Hi! Mary</span>);
+        .toIncludeShallowRendered(<span>Hi! Mary</span>);
+    });
+
+    it('throws an exception if not included', () => {
+      try {
+        expect(<TestComponent name="Mary" />)
+          .toIncludeShallowRendered(<span>Hi, Mary</span>);
+      } catch (err) {
+        expect(err instanceof Error).toBe(true);
+        expect(err.message).toEqual(`Expected '<div><span>Hi! Mary</span></div>' to include '<span>Hi, Mary</span>'`);
+      }
     });
   });
 });

@@ -49,9 +49,9 @@ let api = {
     const shallowRenderer = TestUtils.createRenderer();
     shallowRenderer.render(this.actual);
     return expect(
-      collapse(reactToJsx(shallowRenderer.getRenderOutput())).replace(/[\t\n]/g, '')
+      reactToJsx(shallowRenderer.getRenderOutput()).replace(/[\t\n]/g, '')
     ).toInclude(
-      collapse(reactToJsx(ReactElement)).replace(/[\t\n]/g, '')
+      reactToJsx(ReactElement).replace(/[\t\n]/g, '')
     );
   }
 };
