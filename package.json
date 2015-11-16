@@ -1,7 +1,7 @@
 {
   "name": "expect-jsx",
-  "version": "2.1.2",
-  "description": "toEqualJSX for mjackson/expect",
+  "version": "0.0.1",
+  "description": "toEqualJSX with render testing for expect",
   "main": "index-dist.js",
   "scripts": {
     "prepublish": "npm run build",
@@ -11,7 +11,7 @@
     "test:watch": "mocha --opts mocha.opts --watch --reporter min",
     "shrinkwrap": "npm-shrinkwrap --dev"
   },
-  "author": "Algolia <support@algolia.com> (https://github.com/algolia/)",
+  "author": "EliasRut <eliasrut@dataformers.com> (https://github.com/EliasRut/)",
   "license": "MIT",
   "dependencies": {
     "collapse-white-space": "^1.0.0",
@@ -19,7 +19,7 @@
     "react-addons-test-utils": "^0.14.2",
     "react-to-jsx": "^1.3.2"
   },
-  "repository": "algolia/expect-jsx",
+  "repository": "EliasRut/expect-jsx",
   "keywords": [
     "expect",
     "expect-extension"
