@@ -9,7 +9,7 @@ expect.extend(expectJSX);
 
 class TestComponent extends React.Component {
   render() {
-    return <div>Hi! {this.props.name}</div>;
+    return <div><span>Hi! {this.props.name}</span></div>;
   }
 }
 
@@ -25,6 +25,18 @@ describe('expect(ReactElement).toEqualJSX(ReactElement)', () => {
 
     it('has toIncludeJSX', () => {
       expect(expect().toIncludeJSX).toBeA('function');
+    });
+
+    it('has toEqualShallowRendered', () => {
+      expect(expect().toEqualShallowRendered).toBeA('function');
+    });
+
+    it('has toNotEqualShallowRendered', () => {
+      expect(expect().toNotEqualShallowRendered).toBeA('function');
+    });
+
+    it('has toIncludeShallowRendered', () => {
+      expect(expect().toIncludeShallowRendered).toBeA('function');
     });
   });
 
@@ -43,7 +55,7 @@ describe('expect(ReactElement).toEqualJSX(ReactElement)', () => {
       } catch (err) {
         expect(err instanceof Error).toBe(true);
         expect(err.message)
-          .toEqual(`Expected '<TestComponent extra="neous" />' to equal '<TestComponent />'`);
+          .toEqual(`Expected '<TestComponent extra="neous"/>\\n' to equal '<TestComponent/>\\n'`);
       }
     });
 
@@ -79,7 +91,7 @@ describe('expect(ReactElement).toEqualJSX(ReactElement)', () => {
         expect(<div />).toNotEqualJSX(<div />);
       } catch (err) {
         expect(err instanceof Error).toBe(true);
-        expect(err.message).toEqual(`Expected '<div />' to not equal '<div />'`);
+        expect(err.message).toEqual(`Expected '<div/>\\n' to not equal '<div/>\\n'`);
       }
     });
   });
@@ -95,8 +107,29 @@ describe('expect(ReactElement).toEqualJSX(ReactElement)', () => {
         expect(<div />).toIncludeJSX(<div Hello=", world!" />);
       } catch (err) {
         expect(err instanceof Error).toBe(true);
-        expect(err.message).toEqual(`Expected '<div />' to include '<div Hello=", world!" />'`);
+        expect(err.message).toEqual(`Expected '<div/> ' to include '<div Hello=", world!"/> '`);
       }
+    });
+  });
+
+  context('toEqualShallowRendered', () => {
+    it('works', () => {
+      expect(<TestComponent name="Mary" />)
+        .toEqualShallowRendered(<div><span>Hi! Mary</span></div>);
+    });
+  });
+
+  context('toNotEqualShallowRendered', () => {
+    it('works', () => {
+      expect(<TestComponent name="Mary" />)
+        .toNotEqualShallowRendered(<div><span>Hi, Mary</span></div>);
+    });
+  });
+
+  context('toIncludeShallowRendered', () => {
+    it('works', () => {
+      expect(<TestComponent name="Mary" />)
+        .toNotEqualShallowRendered(<span>Hi! Mary</span>);
     });
   });
 });

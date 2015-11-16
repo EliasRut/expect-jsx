@@ -1,29 +1,57 @@
 import React from 'react';
 import expect from 'expect';
 import collapse from 'collapse-white-space';
+import TestUtils from 'react-addons-test-utils';
 
-import reactElementToJSXString from 'react-element-to-jsx-string';
+import reactToJsx from 'react-to-jsx';
 
 let api = {
   toEqualJSX(ReactElement) {
     return expect(
-      reactElementToJSXString(this.actual)
+      reactToJsx(this.actual)
     ).toEqual(
-      reactElementToJSXString(ReactElement)
+      reactToJsx(ReactElement)
     );
   },
   toNotEqualJSX(ReactElement) {
     return expect(
-      reactElementToJSXString(this.actual)
+      reactToJsx(this.actual)
     ).toNotEqual(
-      reactElementToJSXString(ReactElement)
+      reactToJsx(ReactElement)
     );
   },
   toIncludeJSX(ReactElement) {
     return expect(
-      collapse(reactElementToJSXString(this.actual))
+      collapse(reactToJsx(this.actual))
     ).toInclude(
-      collapse(reactElementToJSXString(ReactElement))
+      collapse(reactToJsx(ReactElement))
+    );
+  },
+  toEqualShallowRendered(ReactElement) {
+    const shallowRenderer = TestUtils.createRenderer();
+    shallowRenderer.render(this.actual);
+    return expect(
+      reactToJsx(shallowRenderer.getRenderOutput()).replace(/[\t\n]/g, '')
+    ).toEqual(
+      reactToJsx(ReactElement).replace(/[\t\n]/g, '')
+    );
+  },
+  toNotEqualShallowRendered(ReactElement) {
+    const shallowRenderer = TestUtils.createRenderer();
+    shallowRenderer.render(this.actual);
+    return expect(
+      reactToJsx(shallowRenderer.getRenderOutput()).replace(/[\t\n]/g, '')
+    ).toNotEqual(
+      reactToJsx(ReactElement).replace(/[\t\n]/g, '')
+    );
+  },
+  toIncludeShallowRendered(ReactElement) {
+    const shallowRenderer = TestUtils.createRenderer();
+    shallowRenderer.render(this.actual);
+    return expect(
+      collapse(reactToJsx(shallowRenderer.getRenderOutput())).replace(/[\t\n]/g, '')
+    ).toInclude(
+      collapse(reactToJsx(ReactElement)).replace(/[\t\n]/g, '')
     );
   }
 };
