@@ -65,6 +65,11 @@ var api = {
     shallowRenderer.render(this.actual);
     return (0, _expect2['default'])((0, _collapseWhiteSpace2['default'])((0, _reactToJsx2['default'])(shallowRenderer.getRenderOutput())).replace(/[\n]/g, '')).toInclude((0, _collapseWhiteSpace2['default'])((0, _reactToJsx2['default'])(ReactElement)).replace(/[\n]/g, ''));
   },
+  toIncludeHTMLWhenRendered: function toIncludeHTMLWhenRendered(ReactElement) {
+    var shallowRenderer = _reactAddonsTestUtils2['default'].createRenderer();
+    shallowRenderer.render(this.actual);
+    return (0, _expect2['default'])((0, _collapseWhiteSpace2['default'])((0, _reactToJsx2['default'])(shallowRenderer.getRenderOutput())).replace(/[\n]/g, '')).toInclude((0, _collapseWhiteSpace2['default'])(ReactElement).replace(/[\n]/g, ''));
+  },
   toIncludeWhenRendered: function toIncludeWhenRendered(ReactElement) {
     var shallowRenderer = _reactAddonsTestUtils2['default'].createRenderer();
     shallowRenderer.render(this.actual);

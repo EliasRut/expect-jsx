@@ -46,6 +46,10 @@ describe('expect(ReactElement).toEqualJSX(ReactElement)', () => {
     it('has toIncludeJSXWhenRendered', () => {
       expect(expect().toIncludeJSXWhenRendered).toBeA('function');
     });
+
+    it('has toIncludeHTMLWhenRendered', () => {
+      expect(expect().toIncludeHTMLWhenRendered).toBeA('function');
+    });
   });
 
   context('toEqualJSX', () => {
@@ -211,6 +215,25 @@ describe('expect(ReactElement).toEqualJSX(ReactElement)', () => {
       try {
         expect(<TestComponent name="Mary" />)
           .toIncludeJSXWhenRendered(<span className="test-class">Hi, Mary</span>);
+      } catch (error) {
+        err = error;
+      }
+      expect(err instanceof Error).toBe(true);
+      expect(err.message).toInclude('to include');
+    });
+  });
+
+  context('toIncludeHTMLWhenRendered', () => {
+    it('works', () => {
+      expect(<TestComponent name="Mary" />)
+        .toIncludeHTMLWhenRendered('<div className="test-class"> <span>');
+    });
+
+    it('throws an exception if not included', () => {
+      let err;
+      try {
+        expect(<TestComponent name="Mary" />)
+          .toIncludeHTMLWhenRendered('<div className="special-test-class"> <span>');
       } catch (error) {
         err = error;
       }

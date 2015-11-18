@@ -76,6 +76,15 @@ let api = {
       collapse(reactToJsx(ReactElement)).replace(/[\n]/g, '')
     );
   },
+  toIncludeHTMLWhenRendered(ReactElement) {
+    const shallowRenderer = TestUtils.createRenderer();
+    shallowRenderer.render(this.actual);
+    return expect(
+      collapse(reactToJsx(shallowRenderer.getRenderOutput())).replace(/[\n]/g, '')
+    ).toInclude(
+      collapse(ReactElement).replace(/[\n]/g, '')
+    );
+  },
   toIncludeWhenRendered(ReactElement) {
     const shallowRenderer = TestUtils.createRenderer();
     shallowRenderer.render(this.actual);
