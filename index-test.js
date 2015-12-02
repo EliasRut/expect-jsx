@@ -5,6 +5,7 @@ import React from 'react';
 import expect from 'expect';
 import expectJSX from './index';
 import TestComponent from './TestComponent';
+import TestComponent2 from './TestComponent2';
 import CombinedTestComponent from './CombinedTestComponent';
 
 expect.extend(expectJSX);
@@ -49,6 +50,18 @@ describe('expect(ReactElement).toEqualJSX(ReactElement)', () => {
 
     it('has toIncludeHTMLWhenRendered', () => {
       expect(expect().toIncludeHTMLWhenRendered).toBeA('function');
+    });
+
+    it('has toExcludeWhenRendered', () => {
+      expect(expect().toExcludeWhenRendered).toBeA('function');
+    });
+
+    it('has toExcludeJSXWhenRendered', () => {
+      expect(expect().toExcludeJSXWhenRendered).toBeA('function');
+    });
+
+    it('has toExcludeHTMLWhenRendered', () => {
+      expect(expect().toExcludeHTMLWhenRendered).toBeA('function');
     });
   });
 
@@ -133,13 +146,13 @@ describe('expect(ReactElement).toEqualJSX(ReactElement)', () => {
   context('toRenderAs', () => {
     it('works', () => {
       expect(<TestComponent name="Mary" />)
-        .toRenderAs(<TestComponent name="Mary" />);
+        .toRenderAs(<TestComponent2 name="Mary" />);
     });
     it('throws an exception on unequal', () => {
       let err;
       try {
         expect(<TestComponent name="Mary" />)
-          .toRenderAs(<TestComponent name="Hans" />);
+          .toRenderAs(<TestComponent2 name="Hans" />);
       } catch (error) {
         err = error;
       }
@@ -169,14 +182,14 @@ describe('expect(ReactElement).toEqualJSX(ReactElement)', () => {
   context('toNotRenderAs', () => {
     it('works', () => {
       expect(<TestComponent name="Mary" />)
-        .toNotRenderAs(<TestComponent name="Hans" />);
+        .toNotRenderAs(<TestComponent2 name="Hans" />);
     });
 
     it('throws an exception on equal', () => {
       let err;
       try {
         expect(<TestComponent name="Mary" />)
-          .toNotRenderAs(<TestComponent name="Mary" />);
+          .toNotRenderAs(<TestComponent2 name="Mary" />);
       } catch (error) {
         err = error;
       }
@@ -259,6 +272,64 @@ describe('expect(ReactElement).toEqualJSX(ReactElement)', () => {
       }
       expect(err instanceof Error).toBe(true);
       expect(err.message).toInclude('to include');
+    });
+  });
+
+  context('toExcludeJSXWhenRendered', () => {
+    it('works', () => {
+      expect(<TestComponent name="Mary" />)
+        .toExcludeJSXWhenRendered(<span className="test-class">Hi, Mary</span>);
+    });
+
+    it('throws an exception if not excluded', () => {
+      let err;
+      try {
+        expect(<TestComponent name="Mary" />)
+          .toExcludeJSXWhenRendered(<span>Hi! Mary</span>);
+      } catch (error) {
+        err = error;
+      }
+      expect(err instanceof Error).toBe(true);
+      expect(err.message).toInclude('to exclude');
+    });
+  });
+
+  context('toExcludeHTMLWhenRendered', () => {
+    it('works', () => {
+      expect(<TestComponent name="Mary" />)
+        .toExcludeHTMLWhenRendered('<div className="special-test-class"> <span>');
+    });
+
+    it('throws an exception if not excluded', () => {
+      let err;
+      try {
+        expect(<TestComponent name="Mary" />)
+          .toExcludeHTMLWhenRendered('<div className="test-class"> <span>');
+      } catch (error) {
+        err = error;
+      }
+      expect(err instanceof Error).toBe(true);
+      expect(err.message).toInclude('to exclude');
+    });
+  });
+
+  context('toExcludeWhenRendered', () => {
+    it('works', () => {
+      expect(<CombinedTestComponent name="Mary" />)
+        .toExcludeWhenRendered(<TestComponent name="Hans" />);
+    });
+
+
+    it('throws an exception if not excluded', () => {
+      let err;
+      try {
+        expect(<CombinedTestComponent name="Mary" />)
+          .toExcludeJSXWhenRendered(<TestComponent name="Mary" />);
+      } catch (error) {
+        err = error;
+      }
+      expect(err instanceof Error).toBe(true);
+      expect(err.message).toInclude('to exclude');
     });
   });
 });

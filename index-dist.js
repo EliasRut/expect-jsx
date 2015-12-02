@@ -76,8 +76,35 @@ var api = {
     var output = shallowRenderer.getRenderOutput();
     shallowRenderer.render(ReactElement);
     return (0, _expect2['default'])((0, _collapseWhiteSpace2['default'])((0, _reactToJsx2['default'])(output)).replace(/[\n]/g, '')).toInclude((0, _collapseWhiteSpace2['default'])((0, _reactToJsx2['default'])(shallowRenderer.getRenderOutput())).replace(/[\n]/g, ''));
+  },
+  toExcludeJSXWhenRendered: function toExcludeJSXWhenRendered(ReactElement) {
+    var shallowRenderer = _reactAddonsTestUtils2['default'].createRenderer();
+    shallowRenderer.render(this.actual);
+    return (0, _expect2['default'])((0, _collapseWhiteSpace2['default'])((0, _reactToJsx2['default'])(shallowRenderer.getRenderOutput())).replace(/[\n]/g, '')).toExclude((0, _collapseWhiteSpace2['default'])((0, _reactToJsx2['default'])(ReactElement)).replace(/[\n]/g, ''));
+  },
+  toExcludeHTMLWhenRendered: function toExcludeHTMLWhenRendered(ReactElement) {
+    var shallowRenderer = _reactAddonsTestUtils2['default'].createRenderer();
+    shallowRenderer.render(this.actual);
+    return (0, _expect2['default'])((0, _collapseWhiteSpace2['default'])((0, _reactToJsx2['default'])(shallowRenderer.getRenderOutput())).replace(/[\n]/g, '')).toExclude((0, _collapseWhiteSpace2['default'])(ReactElement).replace(/[\n]/g, ''));
+  },
+  toExcludeWhenRendered: function toExcludeWhenRendered(ReactElement) {
+    var shallowRenderer = _reactAddonsTestUtils2['default'].createRenderer();
+    shallowRenderer.render(this.actual);
+    var output = shallowRenderer.getRenderOutput();
+    shallowRenderer.render(ReactElement);
+    return (0, _expect2['default'])((0, _collapseWhiteSpace2['default'])((0, _reactToJsx2['default'])(output)).replace(/[\n]/g, '')).toExclude((0, _collapseWhiteSpace2['default'])((0, _reactToJsx2['default'])(shallowRenderer.getRenderOutput())).replace(/[\n]/g, ''));
   }
 };
+
+/*      let err;
+        try {
+            expect(<IssueItem {...simpleItem} />)
+                .toIncludeHTMLWhenRendered('<div className="testify-issue-item__description">');
+        }catch(error) {
+            err = error;
+        }
+        expect(err instanceof Error).toBe(true);
+        expect(err.message).toInclude(`to include`);*/
 
 exports['default'] = api;
 module.exports = exports['default'];

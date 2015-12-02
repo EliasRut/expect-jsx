@@ -3,7 +3,7 @@ import expect from 'expect';
 import collapse from 'collapse-white-space';
 import TestUtils from 'react-addons-test-utils';
 
-import reactToJsx from 'react-to-jsx';
+import reactToJsx from 'react-element-to-jsx-string';
 
 let api = {
   toEqualJSX(ReactElement) {
@@ -95,7 +95,46 @@ let api = {
     ).toInclude(
       collapse(reactToJsx(shallowRenderer.getRenderOutput())).replace(/[\n]/g, '')
     );
+  },
+  toExcludeJSXWhenRendered(ReactElement) {
+    const shallowRenderer = TestUtils.createRenderer();
+    shallowRenderer.render(this.actual);
+    return expect(
+      collapse(reactToJsx(shallowRenderer.getRenderOutput())).replace(/[\n]/g, '')
+    ).toExclude(
+      collapse(reactToJsx(ReactElement)).replace(/[\n]/g, '')
+    );
+  },
+  toExcludeHTMLWhenRendered(ReactElement) {
+    const shallowRenderer = TestUtils.createRenderer();
+    shallowRenderer.render(this.actual);
+    return expect(
+      collapse(reactToJsx(shallowRenderer.getRenderOutput())).replace(/[\n]/g, '')
+    ).toExclude(
+      collapse(ReactElement).replace(/[\n]/g, '')
+    );
+  },
+  toExcludeWhenRendered(ReactElement) {
+    const shallowRenderer = TestUtils.createRenderer();
+    shallowRenderer.render(this.actual);
+    const output = shallowRenderer.getRenderOutput();
+    shallowRenderer.render(ReactElement);
+    return expect(
+      collapse(reactToJsx(output)).replace(/[\n]/g, '')
+    ).toExclude(
+      collapse(reactToJsx(shallowRenderer.getRenderOutput())).replace(/[\n]/g, '')
+    );
   }
 };
+
+/*      let err;
+        try {
+            expect(<IssueItem {...simpleItem} />)
+                .toIncludeHTMLWhenRendered('<div className="testify-issue-item__description">');
+        }catch(error) {
+            err = error;
+        }
+        expect(err instanceof Error).toBe(true);
+        expect(err.message).toInclude(`to include`);*/
 
 export default api;
