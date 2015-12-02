@@ -333,3 +333,60 @@ describe('expect(ReactElement).toEqualJSX(ReactElement)', () => {
     });
   });
 });
+
+import TestComponentWithNull from './TestComponentWithNull';
+import TestUtils from 'react-addons-test-utils';
+import reactToJsx from 'react-element-to-jsx-string';
+import collapse from 'collapse-white-space';
+
+describe('Subcomponents', () => {
+  context('react-element-to-jsx-string', () => {
+    it('works with null values', () => {
+      expect(reactToJsx(<TestComponentWithNull />)).toExist();
+    });
+  });
+  context('shallow renderer', () => {
+    it('works with null values', () => {
+      const shallowRenderer = TestUtils.createRenderer();
+      shallowRenderer.render(<TestComponentWithNull />);
+      expect(reactToJsx(shallowRenderer.getRenderOutput())).toExist();
+    });
+  });
+  context('shallow rendering with JSX comparison', () => {
+    it('works with null values', () => {
+      const shallowRenderer = TestUtils.createRenderer();
+      shallowRenderer.render(<TestComponentWithNull />);
+      expect(reactToJsx(shallowRenderer.getRenderOutput())).toInclude(reactToJsx(<div>{null} {null}</div>));
+    });
+  });
+  context('collapse', () => {
+    it('works with null values', () => {
+      const shallowRenderer = TestUtils.createRenderer();
+      shallowRenderer.render(<TestComponentWithNull />);
+      expect(collapse(reactToJsx(shallowRenderer.getRenderOutput()))).toExist();
+    });
+  });
+  context('regex replace', () => {
+    it('works with null values', () => {
+      const shallowRenderer = TestUtils.createRenderer();
+      shallowRenderer.render(<TestComponentWithNull />);
+      expect(collapse(reactToJsx(shallowRenderer.getRenderOutput())).replace(/[\n]/g, '')).toExist();
+    });
+  });
+  context('expect-jsx functionality', () => {
+    it('works with null values', () => {
+      const shallowRenderer = TestUtils.createRenderer();
+      shallowRenderer.render(<TestComponentWithNull />);
+      expect(
+        collapse(reactToJsx(shallowRenderer.getRenderOutput())).replace(/[\n]/g, '')
+      ).toInclude(
+        collapse(reactToJsx(<div>{null} {null}</div>)).replace(/[\n]/g, '')
+      );
+    });
+  });
+  context('expect-jsx', () => {
+    it('works with null values', () => {
+      expect(<TestComponentWithNull />).toIncludeJSXWhenRendered(<div>{null} {null}</div>);
+    });
+  });
+});
